@@ -15,5 +15,12 @@ namespace TSI.Models
         public string Address { get; set; }
         public string Date_Hired { get; set; }
         public List<Device> Devices { get; set; }
+        public string Full_Name
+        {
+            get
+            {
+                return $"{First_Name + " " + Last_Name}";
+            }
+        }
     }
 }

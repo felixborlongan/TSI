@@ -10,6 +10,8 @@ using TSI.Models;
 using System.Data;
 using System.Web.Services;
 using System.Web.Script.Services;
+using TSI.Connection;
+using TSI.Helpers;
 
 namespace TSI
 {
@@ -24,7 +26,6 @@ namespace TSI
         public static List<Employee> GetEmployees()
         {
             List<Employee> Employees = new List<Employee>();
-
 
             using (var dbConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["dbConnection"].ConnectionString))
             {
@@ -59,6 +60,7 @@ namespace TSI
                 foreach (Employee emp in Employees)
                 {
                     emp.Devices = new List<Models.Device>();
+
                     using (SqlCommand cmd1 = new SqlCommand("spGetDevicesByEmployeeID", dbConnection))
                     {
                         cmd1.CommandType = CommandType.StoredProcedure;
@@ -90,6 +92,7 @@ namespace TSI
         public static void CreateEmployee(string Code, string First_Name, string Last_Name, string Contact_No, string Address, string Date_Hired, string[] Devices)
         {
             int createdID = 0;
+
             using (var dbConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["dbConnection"].ConnectionString))
             {
                 if (dbConnection.State == ConnectionState.Open)
@@ -148,6 +151,7 @@ namespace TSI
         public static Employee FindEmployee(int id)
         {
             var employeeData = new Employee();
+
             using (var dbConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["dbConnection"].ConnectionString))
             {
                 if (dbConnection.State == ConnectionState.Open)
@@ -158,9 +162,10 @@ namespace TSI
                 using (var cmd = new SqlCommand("spGetEmployeeById", dbConnection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
+
                     cmd.Parameters.AddWithValue("@id", id);
 
-                    var reader = cmd.ExecuteReader();
+                    SqlDataReader reader = cmd.ExecuteReader();
 
                     while (reader.Read())
                     {
@@ -217,14 +222,14 @@ namespace TSI
         [WebMethod]
         public static void EditEmployee(int Id, string Code, string First_Name, string Last_Name, string Contact_No, string Address, string Date_Hired, string[] Devices)
         {
-            using (var dbConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["dbConnection"].ToString()))
+            using (SqlConnection dbConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["dbConnection"].ToString()))
             {
                 if (dbConnection.State == ConnectionState.Open)
                     dbConnection.Close();
 
                 dbConnection.Open();
 
-                using (var cmd = new SqlCommand("spEditEmployee", dbConnection))
+                using (SqlCommand cmd = new SqlCommand("spEditEmployee", dbConnection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
 
@@ -305,21 +310,56 @@ namespace TSI
         [WebMethod]
         public static void DeleteEmployee(int id)
         {
+            SqlConnection dbConnection = ConnectionMaster.CreateConnection();
+
+            if (dbConnection.State == ConnectionState.Open)
+                dbConnection.Close();
+            dbConnection.Open();
+
+            SqlCommand cmd = SqlCommandMaster.CreateSqlCommand("spDeleteEmployee", dbConnection);
+
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.AddWithValue("@id", id);
+
+            cmd.ExecuteNonQuery();
+        }
+        [WebMethod]
+        public static void ExportEmployee(int id)
+        {
+            Employee emp = new Employee();
+
             using (SqlConnection dbConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["dbConnection"].ConnectionString))
             {
                 if (dbConnection.State == ConnectionState.Open)
                     dbConnection.Close();
                 dbConnection.Open();
 
-                using (SqlCommand cmd = new SqlCommand("spDeleteEmployee", dbConnection))
+                using (SqlCommand cmd = new SqlCommand("spGetEmployeeById", dbConnection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
 
                     cmd.Parameters.AddWithValue("@id", id);
 
-                    cmd.ExecuteNonQuery();
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        emp.ID = int.Parse(reader["ID"].ToString());
+                        emp.Code = reader["Code"].ToString();
+                        emp.First_Name = reader["First_Name"].ToString();
+                        emp.Last_Name = reader["Last_Name"].ToString();
+                        emp.Contact_No = reader["Contact_No"].ToString();
+                        emp.Address = reader["Address"].ToString();
+                        emp.Date_Hired = reader["Date_Hired"].ToString();
+
+                        emp.Devices = GetEmployeeDevices(id);
+                    }
                 }
             }
+            ExcelGenerator excelGenerator = new ExcelGenerator(emp);
+
+            excelGenerator.Generate();
         }
     }
 }

@@ -77,3 +77,13 @@ c:\users\felix.borlongan\documents\visual studio 2015\Projects\TSI\TSI\bin\Micro
 c:\users\felix.borlongan\documents\visual studio 2015\Projects\TSI\TSI\obj\Debug\TSI.csprojResolveAssemblyReference.cache
 c:\users\felix.borlongan\documents\visual studio 2015\Projects\TSI\TSI\obj\Debug\TSI.dll
 c:\users\felix.borlongan\documents\visual studio 2015\Projects\TSI\TSI\obj\Debug\TSI.pdb
+C:\Users\Felix.Borlongan\Documents\Visual Studio 2015\Projects\TSI\TSI\bin\DocumentFormat.OpenXml.dll
+C:\Users\Felix.Borlongan\Documents\Visual Studio 2015\Projects\TSI\TSI\bin\ICSharpCode.SharpZipLib.dll
+C:\Users\Felix.Borlongan\Documents\Visual Studio 2015\Projects\TSI\TSI\bin\NPOI.dll
+C:\Users\Felix.Borlongan\Documents\Visual Studio 2015\Projects\TSI\TSI\bin\NPOI.OOXML.dll
+C:\Users\Felix.Borlongan\Documents\Visual Studio 2015\Projects\TSI\TSI\bin\NPOI.OpenXml4Net.dll
+C:\Users\Felix.Borlongan\Documents\Visual Studio 2015\Projects\TSI\TSI\bin\NPOI.OpenXmlFormats.dll
+C:\Users\Felix.Borlongan\Documents\Visual Studio 2015\Projects\TSI\TSI\bin\DocumentFormat.OpenXml.xml
+C:\Users\Felix.Borlongan\Documents\Visual Studio 2015\Projects\TSI\TSI\bin\NPOI.xml
+C:\Users\Felix.Borlongan\Documents\Visual Studio 2015\Projects\TSI\TSI\bin\EPPlus.dll
+C:\Users\Felix.Borlongan\Documents\Visual Studio 2015\Projects\TSI\TSI\bin\EPPlus.xml

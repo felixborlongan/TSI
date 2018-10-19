@@ -175,6 +175,18 @@
                 success: OnFindSuccess
             })
         });
+        $(document).on('click', '.employeeExcelGenerate', function () {
+            var data = {
+                id: $(this).data("id")
+            }
+            $.ajax({
+                type: "POST",
+                url: "Default.aspx/ExportEmployee",
+                data: JSON.stringify(data),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json"
+            });
+        })
         $(document).on('click', '.deleteEmployee', function () {
             $("#deleteHiddenID").val($(this).data('id'));
             $("#deleteModal").modal('toggle');
@@ -220,7 +232,8 @@
             $("#employeeTable").empty();
             user.map(user => {
                 var editAction = "<i data-id=\"" + user.ID + "\" data-name=\"" + user.First_Name + " " + user.Last_Name + "\" class=\"fa fa-edit editEmployee\">" + "</i>";
-                var deleteAction = `<i data-id="${user.ID}" data-name="${user.First_Name} ${user.Last_Name}" class="fa fa-trash deleteEmployee"`;
+                var deleteAction = "<i data-id=\"" + user.ID + "\" data-name=\"" + user.First_Name + " " + user.Last_Name + "\" class=\"fa fa-trash deleteEmployee\">" + "</i>";
+                var exportAction = `<i data-id="${user.ID}" data-name="${user.First_Name} ${user.Last_Name}" class="fa fa-file employeeExcelGenerate"`;
                 var html = "<tr>" +
                 "<td>" + user.ID + "</td>" +
                 "<td>" + user.Code + "</td>" +
@@ -229,7 +242,7 @@
                 "<td>" + user.Contact_No + "</td>" +
                 "<td>" + user.Address + "</td>" +
                 "<td>" + user.Date_Hired + "</td>" +
-                "<td>" + editAction + deleteAction + "</td>" +
+                "<td>" + editAction + deleteAction + exportAction + "</td>" +
                 "</tr>"
                 $("#employeeTable").append(html);
             });
