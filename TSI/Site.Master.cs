@@ -7,6 +7,7 @@ using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Microsoft.AspNet.Identity;
+using TSI.Models;
 
 namespace TSI
 {
@@ -74,7 +75,15 @@ namespace TSI
 
         protected void Unnamed_LoggingOut(object sender, LoginCancelEventArgs e)
         {
-            Context.GetOwinContext().Authentication.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            Custom2IPrincipal user = HttpContext.Current.User as Custom2IPrincipal;
+
+            HttpCookie credentialCookie = Request.Cookies["TSI-LOGIN"];
+            credentialCookie.Expires = DateTime.Now.AddDays(-1);
+            Response.Cookies.Add(credentialCookie);
+
+            FormsAuthentication.SignOut();
+
+            Response.Redirect("Login.aspx");
         }
     }
 

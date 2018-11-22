@@ -40,7 +40,7 @@ namespace TSI.Helpers
                 p.SaveAs(new FileInfo(path));
             }
             //implement download file
-            //Download(path);
+            Download(path, _employee);
         }
         private string GenerateHashedFileName()
         {
@@ -55,12 +55,26 @@ namespace TSI.Helpers
             }
             return hashedFilename;
         }
-        private void Download(string path)
+        private void Download(string path, Employee emp)
         {
-            string FileName = _employee.Full_Name; // It's a file name displayed on downloaded file on client side.
+            string filename = path;
+            FileInfo fileInfo = new FileInfo(filename);
 
+            if (fileInfo.Exists)
+            {
+                System.Web.HttpResponse Response = System.Web.HttpContext.Current.Response;
+
+                Response.Clear();
+                Response.AddHeader("Content-Disposition", "attachment; filename=" + fileInfo.Name);
+                Response.AddHeader("Content-Length", fileInfo.Length.ToString());
+                Response.ContentType = "application/octet-stream";
+                Response.Flush();
+                Response.TransmitFile(fileInfo.FullName);
+                Response.End();
+            }
         }
     }
+
     public static class COLUMNS
     {
         public static string ID = "A";

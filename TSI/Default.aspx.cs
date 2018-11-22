@@ -19,7 +19,12 @@ namespace TSI
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            HttpCookie session = Request.Cookies["TSI-LOGIN"];
+                     
+            if (session == null)
+            {
+                Response.Redirect("Login.aspx");
+            }
         }
         [WebMethod]
         [ScriptMethod(UseHttpGet = true)]

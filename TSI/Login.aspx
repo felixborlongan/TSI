@@ -20,6 +20,7 @@
         <div class="col-md-4">
             <asp:Button ID="button1" runat="server" OnClick="button1_Click" Text="Login"/>
         </div>
+        <asp:Literal ID="userliteral" runat="server"></asp:Literal>
     </div>
     </form>
 </body>
